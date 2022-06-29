@@ -9,8 +9,8 @@
 #import "LocationsViewController.h"
 #import "LocationCell.h"
 
-static NSString * const clientID = @"YOUR_CLIENT_ID";
-static NSString * const clientSecret = @"YOUR_CLIENT_SECRET";
+static NSString * const clientID = @"QA1L0Z0ZNA2QVEEDHFPQWK0I5F1DE3GPLSNW4BZEBGJXUCFL";
+static NSString * const clientSecret = @"W2AOE1TYC4MHK5SZYOUGX0J3LVRALMPB4CXT3ZH21ZCPUMCU";
 
 @interface LocationsViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 
@@ -25,6 +25,8 @@ static NSString * const clientSecret = @"YOUR_CLIENT_SECRET";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.results = [[NSArray alloc] init];
     
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
@@ -46,6 +48,7 @@ static NSString * const clientSecret = @"YOUR_CLIENT_SECRET";
     LocationCell *cell = [tableView dequeueReusableCellWithIdentifier:@"LocationCell" forIndexPath:indexPath];
     
     // TODO: get one element from the "results" array, and pass it to the cell
+    [cell updateWithLocation:self.results[indexPath.row]];
     
     return cell;
 }
@@ -56,6 +59,8 @@ static NSString * const clientSecret = @"YOUR_CLIENT_SECRET";
     NSNumber *lat = [venue valueForKeyPath:@"location.lat"];
     NSNumber *lng = [venue valueForKeyPath:@"location.lng"];
     NSLog(@"%@, %@", lat, lng);
+    
+    [self.delegate locationsViewController:self didPickLocationWithLatitude:lat longitude:lng];
 }
 
 - (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
